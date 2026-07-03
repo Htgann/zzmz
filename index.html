@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>长治博物馆 | 星河之脊 · 沉浸启程</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #f0e6ff;
+            scroll-behavior: smooth;
+            background: #05020a;
+            overflow-x: hidden;
+        }
+
+        /* 深邃星空背景 + 粉色流光 */
+        .starfield-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 30% 20%, #1a0f1f 0%, #030007 100%);
+        }
+
+        .pink-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 70% 80%, rgba(255, 105, 180, 0.12) 0%, rgba(255, 20, 147, 0.05) 40%, transparent 80%);
+            pointer-events: none;
+            animation: softPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes softPulse {
+            0% { opacity: 0.3; transform: scale(1);}
+            100% { opacity: 0.7; transform: scale(1.05);}
+        }
+
+        /* ========= 入口封面层 (整页星际启程) 【已增强炫酷效果】 ========= */
+        .entry-cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 40% 45%, #0e0520 0%, #020006 100%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+            transition: opacity 1.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0s 1.5s;
+            opacity: 1;
+            visibility: visible;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .entry-cover.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .entry-content {
+            text-align: center;
+            transform: translateY(-5%);
+            animation: floatEntry 2.2s ease-out infinite alternate;
+            max-width: 90vw;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes floatEntry {
+            0% { transform: translateY(-5%) scale(1);}
+            100% { transform: translateY(-8%) scale(1.02);}
+        }
+
+        .entry-icon {
+            font-size: 5.5rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            /* 统一使用按钮的呼吸光效 */
+            animation: iconBreathGlow 2.2s infinite ease-in-out;
+        }
+
+        /* 图标呼吸光效（和按钮完全一致） */
+        @keyframes iconBreathGlow {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.4)); }
+            50% { filter: drop-shadow(0 0 28px rgba(255, 105, 180, 0.9)); }
+            100% { filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.4)); }
+        }
+
+        /* 移除了原有的 pulseGlow 动画 */
+
+        .entry-icon::before,
+        .entry-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 105, 180, 0.5);
+            animation: ripple 2.5s infinite;
+            opacity: 0;
+        }
+        .entry-icon::after {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes ripple {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+
+        .entry-title {
+            font-size: clamp(2.2rem, 9vw, 4.4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFB6C1, #FF69B4, #FFD966);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: 0.04em;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entry-sub {
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            color: #ffb6c1;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .entry-button {
+            background: rgba(255, 105, 180, 0.2);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255, 105, 180, 0.7);
+            padding: 14px 36px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #FFE6F0;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.25s;
+            cursor: pointer;
+            margin-top: 28px;
+            position: relative;
+            overflow: hidden;
+            animation: btnBreathGlow 2.2s infinite ease-in-out;
+        }
+
+        @keyframes btnBreathGlow {
+            0% { box-shadow: 0 0 10px rgba(255, 105, 180, 0.4); }
+            50% { box-shadow: 0 0 28px rgba(255, 105, 180, 0.9); }
+            100% { box-shadow: 0 0 10px rgba(255, 105, 180, 0.4); }
+        }
+
+        .entry-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,105,180,0), rgba(255,182,193,0.4), rgba(255,105,180,0));
+            animation: buttonGlow 2s infinite ease-in-out alternate;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .entry-button:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes buttonGlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .entry-button:hover {
+            background: #FF69B4;
+            color: #0a0520;
+            box-shadow: 0 0 28px #ff69b4;
+            transform: scale(1.02);
+        }
+
+        .cover-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .main-content {
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 18px 0;
+            border-bottom: 2px solid rgba(255, 105, 180, 0.6);
+            margin-bottom: 24px;
+            background: rgba(5, 2, 10, 0.75);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-radius: 0 0 32px 32px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .logo p {
+            font-size: 0.75rem;
+            color: #FFB6C1;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #e6d5ff;
+            transition: 0.25s;
+            font-size: 0.95rem;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #FF69B4;
+            border-bottom-color: #FF69B4;
+            text-shadow: 0 0 6px rgba(255,105,180,0.5);
+        }
+
+        .hero-carousel {
+            margin: 20px 0 10px;
+            border-radius: 48px;
+            overflow: hidden;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .card-stage {
+            position: relative;
+            width: 100%;
+            max-width: 1100px;
+            height: 400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+        }
+
+        .card-item {
+            position: absolute;
+            width: 55%;
+            height: 100%;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 30px 50px -20px rgba(0,0,0,0.8);
+            transition: all 0.6s cubic-bezier(0.23, 0.95, 0.4, 1.05);
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            background: #0a0515;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .card-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-caption {
+            position: absolute;
+            bottom: 32px;
+            left: 32px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(20,10,40,0.85));
+            backdrop-filter: blur(16px);
+            padding: 12px 28px;
+            border-radius: 48px;
+            color: #FFB6C1;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-left: 4px solid #FF69B4;
+            pointer-events: none;
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            white-space: nowrap;
+        }
+
+        .card-item.left-pos {
+            transform: translateX(-70%) scale(0.7);
+            opacity: 0.5;
+            z-index: 2;
+            filter: brightness(0.5);
+        }
+
+        .card-item.main-pos {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            z-index: 3;
+            filter: brightness(1) drop-shadow(0 0 22px rgba(255,105,180,0.7));
+        }
+
+        .card-item.right-pos {
+            transform: translateX(70%) scale(0.7);
+            opacity: 0.5;
+            z-index: 2;
+            filter: brightness(0.5);
+        }
+
+        .card-item.back-pos {
+            transform: scale(0.6);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 10, 30, 0.85);
+            border: 1px solid rgba(255,105,180,0.7);
+            font-size: 2rem;
+            width: 54px;
+            height: 54px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #FFB6C1;
+            transition: all 0.3s ease;
+            z-index: 30;
+            backdrop-filter: blur(8px);
+        }
+
+        .carousel-btn:hover {
+            background: #FF69B4;
+            color: #05020a;
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 0 20px rgba(255,105,180,0.7);
+        }
+
+        .btn-prev { left: 5px; }
+        .btn-next { right: 5px; }
+
+        .dots {
+            text-align: center;
+            padding: 24px 0 12px;
+            background: transparent;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffa5c0;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0.5;
+        }
+
+        .dot.active {
+            background: #FF69B4;
+            width: 36px;
+            border-radius: 20px;
+            opacity: 1;
+            box-shadow: 0 0 14px #FF69B4;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin: 40px 0;
+        }
+        .info-card {
+            flex: 1;
+            background: rgba(15, 8, 25, 0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            transition: all 0.3s ease;
+        }
+        .info-card:hover {
+            transform: translateY(-6px);
+            border-color: #FF69B4;
+            box-shadow: 0 0 18px rgba(255,105,180,0.2);
+        }
+        .info-card h3 {
+            font-size: 2.2rem;
+            color: #FF69B4;
+        }
+        .highlight-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #FFB6C1, #FF69B4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .wide-section {
+            width: 100%;
+            margin: 60px 0;
+            scroll-margin-top: 100px;
+        }
+        .feature-col-wide {
+            width: 100%;
+            background: rgba(10, 5, 20, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 36px 40px;
+            border-bottom: 4px solid #FF69B4;
+        }
+        .feature-col-wide h2 {
+            font-size: 2.2rem;
+            background: linear-gradient(130deg, #FFB6C1, #FF69B4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 6px solid #FF69B4;
+            padding-left: 24px;
+            margin-bottom: 20px;
+        }
+        .flex-video-text {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin-top: 24px;
+        }
+        .video-box {
+            flex: 1.2;
+            min-width: 280px;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(255,105,180,0.4);
+        }
+        .video-box video {
+            width: 100%;
+            max-height: 330px;
+            object-fit: cover;
+        }
+        .text-list-box {
+            flex: 0.9;
+            background: rgba(20, 10, 30, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 24px 28px;
+        }
+        .exhibit-list-wide {
+            list-style: none;
+        }
+        .exhibit-list-wide li {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #FFE6F0;
+        }
+
+        .feature-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin: 40px 0;
+        }
+        .feature-col {
+            flex: 1;
+            background: rgba(10, 5, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 28px;
+            border-bottom: 3px solid #FF69B4;
+        }
+        .feature-col h2 {
+            font-size: 1.8rem;
+            color: #FFB6C1;
+            border-left: 4px solid #FF69B4;
+            padding-left: 18px;
+            margin-bottom: 20px;
+        }
+        .feature-img {
+            margin-top: 20px;
+            border-radius: 28px;
+            overflow: hidden;
+            height: 170px;
+        }
+        .feature-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .feature-img img:hover {
+            transform: scale(1.05);
+        }
+        .dual-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin: 56px 0;
+        }
+        .speak-card, .activity-card {
+            flex: 1;
+            background: rgba(15, 7, 25, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 28px;
+            border: 1px solid rgba(255,105,180,0.2);
+        }
+        .speak-card h2, .activity-card h2 {
+            font-size: 1.8rem;
+            color: #FFB6C1;
+            margin-bottom: 18px;
+        }
+        .course-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 20px 0;
+        }
+        .tag {
+            background: rgba(255, 105, 180, 0.2);
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: #FFB6C1;
+        }
+        .cultural-creative {
+            background: rgba(20, 8, 30, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 40px 36px;
+            margin: 50px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255,105,180,0.3);
+        }
+        .creative-gallery {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .creative-item {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 32px;
+            width: 130px;
+            padding: 16px 6px;
+            text-align: center;
+            border: 1px solid #FF69B4;
+        }
+        .extra-img-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .extra-img-row img {
+            border-radius: 28px;
+            width: 200px;
+            height: 140px;
+            object-fit: cover;
+            border: 1px solid rgba(255,105,180,0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .extra-img-row img:hover {
+            transform: scale(1.08);
+        }
+        footer {
+            text-align: center;
+            padding: 32px 0;
+            border-top: 1px solid rgba(255,105,180,0.3);
+            color: #ffb6c1;
+        }
+
+        .img-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .img-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            transform: scale(1);
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 24px;
+            border: 2px solid #FF69B4;
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.4);
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            object-fit: contain;
+        }
+        .img-modal.show .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 105, 180, 0.2);
+            border: 1px solid #FF69B4;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+        .modal-close:hover {
+            background: #FF69B4;
+            color: #000;
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 780px) {
+            .navbar { flex-direction: column; gap: 12px; }
+            .carousel-container { height: 350px; }
+            .card-stage { height: 300px; }
+            .card-item { width: 75%; }
+            .face-caption { font-size: 0.7rem; left: 16px; bottom: 16px; padding: 6px 14px; white-space: nowrap; }
+            .carousel-btn { width: 40px; height: 40px; font-size: 1.4rem; }
+            .btn-prev { left: 0px; }
+            .btn-next { right: 0px; }
+            .card-item.left-pos { transform: translateX(-50%) scale(0.7); }
+            .card-item.right-pos { transform: translateX(50%) scale(0.7); }
+            .modal-content {
+                transform: scale(1);
+            }
+            .img-modal.show .modal-content {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield-bg"></div>
+    <div class="pink-glow"></div>
+    <canvas id="starCanvas" style="position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: -1;"></canvas>
+
+    <div id="imgModal" class="img-modal">
+        <button class="modal-close" id="modalClose">×</button>
+        <img src="" id="modalImg" class="modal-content">
+    </div>
+
+    <div id="entryCover" class="entry-cover">
+        <canvas id="coverParticleCanvas" class="cover-particles"></canvas>
+        <div class="entry-content">
+            <div class="entry-icon">🌌✨</div>
+            <div class="entry-title">长治博物馆 · 星河之脊</div>
+            <div class="entry-sub">
+            <span style="font-weight: 800; font-size: 2rem; 
+              letter-spacing: 0.5em; text-align: center;"> CHANGZHI BOWUGUAN · 千年瑰宝 </span>
+            </div>
+            <div class="entry-button" id="enterBtn">
+                触碰星轨 即刻启程 <span style="font-size:2rem;">➤</span>
+            </div>
+            <p style="margin-top: 2.5rem; font-size: 0.8rem; opacity: 0.7;"> 点击任意区域 </p>
+        </div>
+    </div>
+
+    <div id="mainContent" class="main-content">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo" style="text-align: center;">
+                    <h1 style="display: inline-block;">🌙 长治博物馆</h1>
+                    <p style="font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; margin-top: 4px;"> 星河璀璨 · 粉映上党 </p>
+                </div>
+                <div class="nav-links">
+                    <a onclick="document.getElementById('section-general').scrollIntoView({behavior:'smooth'})">序厅 · 通史展</a>
+                    <a onclick="document.getElementById('section-liuli').scrollIntoView({behavior:'smooth'})">琉璃重光</a>
+                    <a onclick="document.getElementById('section-chuzhou').scrollIntoView({behavior:'smooth'})">盛世潞州</a>
+                    <a onclick="document.getElementById('section-collection').scrollIntoView({behavior:'smooth'})">典藏珍品</a>
+                    <a onclick="document.getElementById('section-intangible').scrollIntoView({behavior:'smooth'})">非遗文创</a>
+                    <a onclick="document.getElementById('section-edu').scrollIntoView({behavior:'smooth'})">教育研学</a>
+                    <a onclick="document.getElementById('section-shop').scrollIntoView({behavior:'smooth'})">文创商店</a>
+                </div>
+            </div>
+
+            <div class="hero-carousel">
+                <div class="carousel-container">
+                    <div class="card-stage" id="cardStage">
+                        <div class="card-item left-pos" data-index="0" id="card0">
+                            <img src="1.jpg" alt="长治博物馆新馆">
+                            <div class="card-caption">🏛️ 长治博物馆 · 新馆 | 星河之脊</div>
+                        </div>
+                        <div class="card-item main-pos" data-index="1" id="card1">
+                            <img src="2.jpg" alt="唐三彩抱鸭壶女俑">
+                            <div class="card-caption">🦆 镇馆之宝 · 唐三彩抱鸭壶女俑 | 粉映盛唐</div>
+                        </div>
+                        <div class="card-item right-pos" data-index="2" id="card2">
+                            <img src="3.jpg" alt="明三彩珐华人物罐">
+                            <div class="card-caption">🏺 明·珐华镂雕人物罐 | 琉璃华彩</div>
+                        </div>
+                    </div>
+                    <button class="carousel-btn btn-prev" id="prevBtn">❮</button>
+                    <button class="carousel-btn btn-next" id="nextBtn">❯</button>
+                </div>
+                <div class="dots" id="dotsContainer"></div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card"><h3>🕒 开放时间</h3><p>周二至周日 09:00 - 17:00<br>（周一闭馆）</p><span class="highlight-text">免费预约</span></div>
+                <div class="info-card"><h3>🎟️ 票价信息</h3><p>常设展：<strong>免费参观</strong><br>特展请关注公众号</p><span class="highlight-text">惠民服务</span></div>
+                <div class="info-card"><h3>🤝 为你服务</h3><p>智慧导览 · 志愿讲解<br>电话: 0355-1234567</p><span class="highlight-text">贴心关怀</span></div>
+            </div>
+
+            <div id="section-general" class="wide-section">
+                <div class="feature-col-wide">
+                    <h2>📜 序厅 · 通史展｜上党从来天下脊</h2>
+                    <p style="color:#FFD9E6; margin-bottom:12px;">从旧石器时代至明清，完整呈现长治地区百万年历史脉络。</p>
+                    <div class="flex-video-text">
+                        <div class="video-box">
+                            <video id="historyVideo" controls loop playsinline poster="https://picsum.photos/id/20/600/330">
+                                <source src="video.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="text-list-box">
+                            <ul class="exhibit-list-wide">
+                                <li><span>🏺</span> 新石器时代 · 仰韶文化彩陶</li>
+                                <li><span>⚱️</span> 战国 · 长治分水岭青铜器</li>
+                                <li><span>📜</span> 唐代 · 潞州府城砖铭文</li>
+                                <li><span>🌟</span> 琉璃吉光 · 千年上党记忆</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-liuli" style="scroll-margin-top:100px;">
+                <div class="feature-row">
+                    <div class="feature-col"><h2>✨ 琉璃重光 · 华彩千年</h2><p>长治琉璃甲天下，故宫琉璃脊兽多出自长治匠人之手。</p><div class="feature-img"><img src="4.jpg" alt="琉璃鸱吻"></div><ul><li>🐉 元 · 黄绿釉琉璃鸱吻</li><li>🏺 明代 · 三彩琉璃罗汉像</li></ul></div>
+                    <div class="feature-col"><h2>🏺 珐华器特展</h2><p>立粉线条、堆色填彩，长治珐华素有北方明珠之誉。</p><div class="feature-img"><img src="3.jpg" alt="珐华罐"></div><p>明·珐华镂雕人物故事罐（国家一级文物）</p></div>
+                </div>
+            </div>
+
+            <div id="section-chuzhou" style="scroll-margin-top:100px;">
+                <div class="feature-col"><h2>🏮 盛世潞州 · 唐风遗韵</h2><div style="display:flex; gap:20px; flex-wrap:wrap;"><div style="flex:1"><div class="feature-img"><img src="2.jpg" alt="唐三彩抱鸭壶女俑"></div><p><strong>唐三彩抱鸭壶女俑</strong><br>镇馆之宝</p></div><div style="flex:1"><div class="feature-img"><img src="5.jpg" alt="胡人俑"></div><p><strong>唐代胡人俑</strong><br>丝路见证</p></div></div></div>
+            </div>
+
+            <div id="section-collection" style="scroll-margin-top:100px;">
+                <div class="dual-section">
+                    <div class="speak-card"><h2>🏺 典藏珍品 · 吉金耀彩</h2><ul><li>⚱️ 春秋·蟠螭纹铜鼎</li><li>🌸 宋代·八义窑红绿彩瓷盘</li></ul><div class="feature-img"><img src="6.jpg" alt="青铜器"></div></div>
+                    <div class="activity-card"><h2>📿 陶瓷撷英</h2><div style="display:flex; gap:12px;"><div style="background:#2a1a30; border-radius:28px; padding:20px;">红绿彩瓷</div><div style="background:#2a1a30; border-radius:28px; padding:20px;">白釉褐彩</div></div></div>
+                </div>
+            </div>
+
+            <div id="section-intangible" style="scroll-margin-top:100px;">
+                <div class="cultural-creative"><div><h2>🎨 非遗文创 · 匠心承韵</h2><p>上党堆锦、八义窑红绿彩、黎侯虎</p></div><div class="creative-gallery"><div class="creative-item"><div style="font-size:2rem;">🪡</div><p>上党堆锦</p></div><div class="creative-item"><div style="font-size:2rem;">🐯</div><p>黎侯虎布艺</p></div></div></div>
+                <div class="extra-img-row"><img src="7.jpg" alt="堆锦"><img src="8.jpg" alt="八义窑"><img src="9.jpg" alt="黎侯虎"></div>
+            </div>
+
+            <div id="section-edu" style="scroll-margin-top:100px;">
+                <div class="dual-section">
+                    <div class="speak-card"><h2>📖 教育研学 · 让文物活起来</h2><div class="course-tags"><span class="tag">琉璃研学营</span><span class="tag">馆校合作</span><span class="tag">文博大讲堂</span></div><div class="feature-img"><img src="10.jpg" alt="研学"></div></div>
+                    <div class="activity-card"><h2>🌟 主题活动</h2><div style="display:flex; gap:12px;"><div style="background:#2a1a30; border-radius:28px; padding:16px;">考古体验</div><div style="background:#2a1a30; border-radius:28px; padding:16px;">琉璃工坊</div></div></div>
+                </div>
+            </div>
+
+            <div id="section-shop" style="scroll-margin-top:100px;">
+                <div class="cultural-creative"><div><h2>🛍️ 文创商店 · 把文化带回家</h2></div><div class="creative-gallery"><div class="creative-item"><div>🦆</div><p>抱鸭壶冰箱贴</p></div><div class="creative-item"><div>🏺</div><p>珐华丝巾</p></div></div></div>
+                <div class="extra-img-row"><img src="11.jpg" alt="文创产品"><img src="12.jpg" alt="文创产品"></div>
+            </div>
+
+            <footer><p>© 长治博物馆 · 星空下的上党 | 地址：滨湖生态新区迎宾大道9号</p></footer>
+        </div>
+    </div>
+
+    <script>
+        const entryCover = document.getElementById('entryCover');
+        const mainContent = document.getElementById('mainContent');
+        const enterBtn = document.getElementById('enterBtn');
+        
+        function showMainAndRemoveEntry() {
+            if (!entryCover || !mainContent) return;
+            entryCover.classList.add('hide');
+            mainContent.classList.add('visible');
+        }
+        
+        entryCover.addEventListener('click', (e) => {
+            if (!mainContent.classList.contains('visible')) {
+                showMainAndRemoveEntry();
+            }
+        });
+        if (enterBtn) {
+            enterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showMainAndRemoveEntry();
+            });
+        }
+
+        const coverCanvas = document.getElementById('coverParticleCanvas');
+        if (coverCanvas) {
+            const coverCtx = coverCanvas.getContext('2d');
+            let coverParticles = [];
+            let coverMouseX = 0, coverMouseY = 0;
+
+            function resizeCoverCanvas() {
+                coverCanvas.width = entryCover.clientWidth;
+                coverCanvas.height = entryCover.clientHeight;
+            }
+            resizeCoverCanvas();
+            window.addEventListener('resize', resizeCoverCanvas);
+
+            entryCover.addEventListener('mousemove', (e) => {
+                coverMouseX = e.clientX;
+                coverMouseY = e.clientY;
+                for (let i = 0; i < 3; i++) {
+                    coverParticles.push({
+                        x: coverMouseX,
+                        y: coverMouseY,
+                        vx: (Math.random() - 0.5) * 3,
+                        vy: (Math.random() - 0.5) * 3,
+                        life: 1,
+                        size: Math.random() * 3 + 1
+                    });
+                }
+            });
+
+            function drawCoverParticles() {
+                coverCtx.clearRect(0, 0, coverCanvas.width, coverCanvas.height);
+                for (let i = coverParticles.length - 1; i >= 0; i--) {
+                    const p = coverParticles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life -= 0.02;
+                    if (p.life <= 0) {
+                        coverParticles.splice(i, 1);
+                        continue;
+                    }
+                    coverCtx.beginPath();
+                    coverCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    coverCtx.fillStyle = `rgba(255, 105, 180, ${p.life})`;
+                    coverCtx.fill();
+                    coverCtx.beginPath();
+                    coverCtx.arc(p.x, p.y, p.size * 0.6, 0, Math.PI * 2);
+                    coverCtx.fillStyle = `rgba(255, 182, 193, ${p.life * 0.6})`;
+                    coverCtx.fill();
+                }
+                requestAnimationFrame(drawCoverParticles);
+            }
+            drawCoverParticles();
+        }
+        
+        const cardItems = document.querySelectorAll('.card-item');
+        const prevBtnCarousel = document.getElementById('prevBtn');
+        const nextBtnCarousel = document.getElementById('nextBtn');
+        const dotsDivMain = document.getElementById('dotsContainer');
+        let currentIndex = 1;
+        const totalItems = cardItems.length;
+        let autoTimer;
+        let isTransitioning = false;
+        
+        function updateCardPositions() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            cardItems.forEach(item => {
+                item.classList.remove('left-pos', 'main-pos', 'right-pos', 'back-pos');
+            });
+            
+            const prevIndex = (currentIndex - 1 + totalItems) % totalItems;
+            const nextIndex = (currentIndex + 1) % totalItems;
+            
+            cardItems[prevIndex].classList.add('left-pos');
+            cardItems[currentIndex].classList.add('main-pos');
+            cardItems[nextIndex].classList.add('right-pos');
+            
+            updateDots(currentIndex);
+            
+            setTimeout(() => { isTransitioning = false; }, 600);
+        }
+        
+        function nextSlide() {
+            if (isTransitioning) return;
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCardPositions();
+        }
+        
+        function prevSlide() {
+            if (isTransitioning) return;
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCardPositions();
+        }
+        
+        function goToSlide(index) {
+            if (isTransitioning || index === currentIndex) return;
+            currentIndex = index;
+            updateCardPositions();
+        }
+        
+        function createDots() {
+            if (!dotsDivMain) return;
+            dotsDivMain.innerHTML = '';
+            for (let i = 0; i < totalItems; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.addEventListener('click', () => {
+                    stopAutoPlay();
+                    goToSlide(i);
+                    startAutoPlay();
+                });
+                dotsDivMain.appendChild(dot);
+            }
+            updateDots(currentIndex);
+        }
+        
+        function updateDots(activeIndex) {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                if (i === activeIndex) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+        
+        function startAutoPlay() {
+            if (autoTimer) clearInterval(autoTimer);
+            autoTimer = setInterval(() => { nextSlide(); }, 3000);
+        }
+        
+        function stopAutoPlay() { 
+            if (autoTimer) { 
+                clearInterval(autoTimer); 
+                autoTimer = null; 
+            } 
+        }
+        
+        function initCarousel() {
+            updateCardPositions();
+            createDots();
+            startAutoPlay();
+            
+            const carouselArea = document.querySelector('.hero-carousel');
+            if (carouselArea) {
+                carouselArea.addEventListener('mouseenter', stopAutoPlay);
+                carouselArea.addEventListener('mouseleave', startAutoPlay);
+            }
+            
+            if (prevBtnCarousel && nextBtnCarousel) {
+                prevBtnCarousel.addEventListener('click', () => { 
+                    stopAutoPlay(); 
+                    prevSlide(); 
+                    startAutoPlay(); 
+                });
+                nextBtnCarousel.addEventListener('click', () => { 
+                    stopAutoPlay(); 
+                    nextSlide(); 
+                    startAutoPlay(); 
+                });
+            }
+        }
+        
+        initCarousel();
+        
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let widthStar = window.innerWidth, heightStar = window.innerHeight;
+        let starsArray = [];
+        function resizeStars() {
+            widthStar = window.innerWidth;
+            heightStar = window.innerHeight;
+            canvas.width = widthStar;
+            canvas.height = heightStar;
+            starsArray = [];
+            for (let i = 0; i < 550; i++) {
+                starsArray.push({
+                    x: Math.random() * widthStar,
+                    y: Math.random() * heightStar,
+                    r: Math.random() * 3.2 + 0.8,
+                    alpha: Math.random() * 0.8 + 0.2,
+                    speed: 0.006 + Math.random() * 0.03,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+        function drawStarsAnimation() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, widthStar, heightStar);
+            for (let s of starsArray) {
+                const twinkle = 0.4 + (Math.sin(Date.now() * s.speed + s.phase) * 0.6 + 0.5) * 0.6;
+                const finalAlpha = Math.min(0.95, s.alpha * (0.5 + twinkle));
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(215, 225, 255, ${finalAlpha})`;
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r * 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 200, 235, ${finalAlpha * 0.25})`;
+                ctx.fill();
+            }
+            requestAnimationFrame(drawStarsAnimation);
+        }
+        window.addEventListener('resize', () => { resizeStars(); });
+        resizeStars();
+        drawStarsAnimation();
+
+        const imgModal = document.getElementById('imgModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalClose = document.getElementById('modalClose');
+        const clickableImgs = document.querySelectorAll('.feature-img img, .extra-img-row img');
+
+        function openModal(imgSrc) {
+            modalImg.src = imgSrc;
+            imgModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            imgModal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        clickableImgs.forEach(img => {
+            img.addEventListener('click', () => openModal(img.src));
+        });
+
+        modalClose.addEventListener('click', closeModal);
+
+        imgModal.addEventListener('click', (e) => {
+            if (e.target === imgModal) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && imgModal.classList.contains('show')) closeModal();
+        });
+    </script>
+</body>
+</html>
